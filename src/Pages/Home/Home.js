@@ -11,11 +11,11 @@ function Home() {
         <div className="hero-content flex-col lg:flex-row-reverse">
           <img
             src={Bannerpng}
-            className="max-w-xl rounded-lg shadow-2xl"
+            className="lg:max-w-xl md:lg:max-w-sm rounded-lg shadow-2xl"
             alt=""
           />
           <div>
-            <h1 className="text-5xl font-bold">
+            <h1 className="lg:text-5xl text-3xl  font-bold">
               Your New Smile Starts
               <br />
               Here
@@ -36,15 +36,15 @@ function Home() {
       </div>
       <InfoCards />
       <ServiceCards />
-      <div className="hero min-h-screen bg-base-200">
+      <div className="hero min-h-screen py-10 w-full bg-base-200">
         <div className="hero-content flex-col lg:flex-row">
           <img
             src={Treatment}
-            className="max-w-sm rounded-lg shadow-2xl"
+            className="lg:max-w-xl md:lg:max-w-sm rounded-lg shadow-2xl"
             alt=""
           />
-          <div className="w-2/4 ml-8">
-            <h1 className="text-5xl font-bold">
+          <div className="lg:w-2/4 py-10 lg:ml-8 sm:m-auto">
+            <h1 className="lg:text-5xl text-3xl font-bold">
               Exceptional Dental Care, on Your Terms
             </h1>
             <p className="py-6">

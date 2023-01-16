@@ -30,7 +30,7 @@ function InfoCards() {
   ];
   return (
     <div className="container mx-auto">
-      <div className="py-20 grid grid-cols-3 gap-6">
+      <div className="py-20 m-4 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
         {cardData.map((card) => (
           <InfoCard key={card._id} card={card} />
         ))}

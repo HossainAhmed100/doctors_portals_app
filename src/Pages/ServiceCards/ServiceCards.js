@@ -34,7 +34,7 @@ function ServiceCards() {
         <p className="text-base font-medium text-cyan-500">OUR SERVICES</p>
         <h1 className="text-xl text-gray-500">Services We Provide</h1>
       </div>
-      <div className="py-6 grid grid-cols-3 gap-6">
+      <div className="py-6 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
         {cardData.map((cards) => (
           <ServiceCard key={cards._id} cards={cards} />
         ))}
