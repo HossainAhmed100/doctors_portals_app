@@ -2,7 +2,9 @@ import React from "react";
 import Bannerpng from "../../assets/images/chair.png";
 import Treatment from "../../assets/images/treatment.png";
 import InfoCards from "../InfoCards/InfoCards";
+import MakeAppointment from "../MakeAppointment/MakeAppointment";
 import ServiceCards from "../ServiceCards/ServiceCards";
+import Testimonial from "../Testimonial/Testimonial";
 
 function Home() {
   return (
@@ -64,6 +66,8 @@ function Home() {
           </div>
         </div>
       </div>
+      <MakeAppointment />
+      <Testimonial />
     </div>
   );
 }
