@@ -24,30 +24,32 @@ function NavBar() {
     </React.Fragment>
   );
   return (
-    <div className="navbar shadow-md bg-base-100">
-      <div className="navbar-start">
-        <div className="dropdown">
-          <label tabIndex={0} className="btn btn-ghost lg:hidden">
-            <HiOutlineMenuAlt1 size={25} />
-          </label>
-          <ul
-            tabIndex={0}
-            className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
-          >
-            {menuItems}
-          </ul>
+    <div className="container shadow-md bg-base-100 mx-auto">
+      <div className="navbar">
+        <div className="navbar-start">
+          <div className="dropdown">
+            <label tabIndex={0} className="btn btn-ghost lg:hidden">
+              <HiOutlineMenuAlt1 size={25} />
+            </label>
+            <ul
+              tabIndex={0}
+              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+            >
+              {menuItems}
+            </ul>
+          </div>
+          <a href="/" className="btn btn-ghost normal-case text-xl">
+            Doctors Portal
+          </a>
         </div>
-        <a href="/" className="btn btn-ghost normal-case text-xl">
-          Doctors Portal
-        </a>
-      </div>
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">{menuItems}</ul>
-      </div>
-      <div className="navbar-end">
-        <a href="/" className="btn">
-          Get started
-        </a>
+        <div className="navbar-center hidden lg:flex">
+          <ul className="menu menu-horizontal px-1">{menuItems}</ul>
+        </div>
+        <div className="navbar-end">
+          <a href="/" className="btn">
+            Get started
+          </a>
+        </div>
       </div>
     </div>
   );
