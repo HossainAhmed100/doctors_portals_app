@@ -43,7 +43,7 @@ function Home() {
             className="max-w-sm rounded-lg shadow-2xl"
             alt=""
           />
-          <div>
+          <div className="w-2/4 ml-8">
             <h1 className="text-5xl font-bold">
               Exceptional Dental Care, on Your Terms
             </h1>
