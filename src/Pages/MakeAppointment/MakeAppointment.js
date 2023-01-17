@@ -11,7 +11,7 @@ function MakeAppointment() {
     >
       <div className="hero w-full">
         <div className="hero-content flex-col lg:flex-row">
-          <img src={doctor} className="-mt-32 w-2/4" alt="" />
+          <img src={doctor} className="-mt-32 w-2/4 hidden lg:flex" alt="" />
           <div className="lg:w-2/4 py-10 lg:ml-8 sm:m-auto">
             <h1 className="text-base text-cyan-500 py-4 font-bold">
               Appointment

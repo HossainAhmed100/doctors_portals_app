@@ -1,6 +1,7 @@
 import React from "react";
 import Bannerpng from "../../assets/images/chair.png";
 import Treatment from "../../assets/images/treatment.png";
+import ContuctUs from "../ContuctUs/ContuctUs";
 import InfoCards from "../InfoCards/InfoCards";
 import MakeAppointment from "../MakeAppointment/MakeAppointment";
 import ServiceCards from "../ServiceCards/ServiceCards";
@@ -68,6 +69,7 @@ function Home() {
       </div>
       <MakeAppointment />
       <Testimonial />
+      <ContuctUs />
     </div>
   );
 }
