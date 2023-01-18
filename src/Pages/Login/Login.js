@@ -1,6 +1,5 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { BiLogInCircle } from "react-icons/bi";
 import { BsGoogle } from "react-icons/bs";
 
 function Login() {
@@ -45,7 +44,13 @@ function Login() {
             </label>
             <input
               type="password"
-              {...register("inputPassword", { required: true })}
+              {...register("inputPassword", {
+                required: true,
+                minLength: {
+                  value: 6,
+                  message: "Password Mus be 6 character lobger",
+                },
+              })}
               placeholder="Password Type here"
               className="input input-bordered w-full max-w-xs"
             />
