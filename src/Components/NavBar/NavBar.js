@@ -16,7 +16,7 @@ function NavBar() {
         <Link to="/">About</Link>
       </li>
       <li>
-        <Link to="/">Reviews</Link>
+        <Link to="/signup">SignUp</Link>
       </li>
       <li>
         <Link to="/login">Login</Link>
@@ -24,8 +24,8 @@ function NavBar() {
     </React.Fragment>
   );
   return (
-    <div className="container shadow-md bg-base-100 mx-auto">
-      <div className="navbar">
+    <div className="shadow-md bg-base-100">
+      <div className="navbar container mx-auto">
         <div className="navbar-start">
           <div className="dropdown">
             <label tabIndex={0} className="btn btn-ghost lg:hidden">
