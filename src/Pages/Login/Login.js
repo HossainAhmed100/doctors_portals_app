@@ -1,18 +1,37 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { AuthContext } from "../../Contexts/AuthProvider";
 
 function Login() {
+  const { userLogin, signinGooglePopup } = useContext(AuthContext);
+  const [loginError, setLoginError] = useState("");
+  const location = useLocation();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => {
+    setLoginError("");
     const email = data.inputEmail;
     const password = data.inputPassword;
+    userLogin(email, password)
+      .then((result) => {
+        console.log(result);
+        toast.success("Login Successfull");
+        navigate(from, { replace: true });
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoginError(error.message);
+      });
     console.log({ email, password });
   };
+
+  const from = location.state?.from?.pathname || "/";
 
   return (
     <div className="contsiner mx-auto py-20">
@@ -59,9 +78,12 @@ function Login() {
                 {errors?.inputPassword?.message}
               </span>
             )}
-            <span className="label-text text-end cursor-pointer hover:underline">
+            <Link
+              to="/passwordreset"
+              className="label-text text-end cursor-pointer hover:underline"
+            >
               Forgat Password?
-            </span>
+            </Link>
             <input
               type="submit"
               className="btn font-normal w-full text-lg m-auto my-4"
@@ -76,8 +98,12 @@ function Login() {
                 Create new Account
               </Link>
             </p>
+            {loginError && (
+              <p className="label-text text-red-500">{loginError}</p>
+            )}
             <div className="divider">OR</div>
             <button
+              onClick={() => signinGooglePopup()}
               type="button"
               className="btn font-normal text-base btn-outline w-full m-auto"
             >

@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { BsGoogle } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { AuthContext } from "../../Contexts/AuthProvider";
 
 function SignUp() {
+  const { createUser, updateUser } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -13,6 +16,18 @@ function SignUp() {
     const name = data.inputName;
     const email = data.inputEmail;
     const password = data.inputPassword;
+    createUser(email, password)
+      .then((result) => {
+        console.log(result);
+        const userInfo = { displayName: name };
+        toast.success("SignUp Successfull");
+        updateUser(userInfo)
+          .then(() => {})
+          .catch((error) => console.log(error));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     console.log({ name, email, password });
   };
 

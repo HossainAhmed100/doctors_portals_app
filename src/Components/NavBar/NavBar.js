@@ -1,9 +1,20 @@
-import React from "react";
-// import { Link } from "react-router-dom";
+import React, { useContext, useState } from "react";
 import { HiOutlineMenuAlt1 } from "react-icons/hi";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../Contexts/AuthProvider";
+import { useEffect } from "react";
+import { themeChange } from "theme-change";
 
 function NavBar() {
+  const { user, logOut } = useContext(AuthContext);
+  const [httt, setHttt] = useState(false);
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {})
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
   const menuItems = (
     <React.Fragment>
       <li>
@@ -15,14 +26,27 @@ function NavBar() {
       <li>
         <Link to="/">About</Link>
       </li>
-      <li>
-        <Link to="/signup">SignUp</Link>
-      </li>
-      <li>
-        <Link to="/login">Login</Link>
-      </li>
+      {user?.uid ? (
+        <>
+          <li>
+            <Link to="/dashboard">Dashboard</Link>
+          </li>
+          <li>
+            <button onClick={() => handleLogOut()}>SignOut</button>
+          </li>
+        </>
+      ) : (
+        <li>
+          <Link to="/login">Login</Link>
+        </li>
+      )}
     </React.Fragment>
   );
+
+  useEffect(() => {
+    themeChange(false);
+  }, [httt]);
+
   return (
     <div className="shadow-md bg-base-100">
       <div className="navbar container mx-auto">
@@ -46,9 +70,20 @@ function NavBar() {
           <ul className="menu menu-horizontal px-1">{menuItems}</ul>
         </div>
         <div className="navbar-end">
-          <a href="/" className="btn">
-            Get started
-          </a>
+          {user?.uid ? (
+            <a href="/" className="btn">
+              {user?.displayName}
+            </a>
+          ) : (
+            ""
+          )}
+          <button
+            onClick={() => setHttt(!httt)}
+            data-toggle-theme="dark,light"
+            data-act-class="ACTIVECLASS"
+          >
+            {httt ? "Dark" : "Light"}
+          </button>
         </div>
       </div>
     </div>
