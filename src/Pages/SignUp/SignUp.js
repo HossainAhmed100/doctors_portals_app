@@ -1,34 +1,62 @@
 import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { BsGoogle } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../Contexts/AuthProvider";
 
 function SignUp() {
   const { createUser, updateUser } = useContext(AuthContext);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const name = data.inputName;
     const email = data.inputEmail;
     const password = data.inputPassword;
-    createUser(email, password)
-      .then((result) => {
+    await createUser(email, password)
+      .then(async (result) => {
         console.log(result);
         const userInfo = { displayName: name };
         toast.success("SignUp Successfull");
-        updateUser(userInfo)
-          .then(() => {})
+        await updateUser(userInfo)
+          .then(() => {
+            saveUser(name, email);
+          })
           .catch((error) => console.log(error));
       })
       .catch((error) => {
         console.log(error);
       });
-    console.log({ name, email, password });
+  };
+
+  const saveUser = (name, email) => {
+    const user = { name, email };
+    fetch("http://localhost:5000/users", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(user),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        getUserToken(email);
+      });
+  };
+
+  const getUserToken = (email) => {
+    fetch(`http://localhost:5000/jwt?email=${email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.accessToken) {
+          localStorage.setItem("accessToken", data.accessToken);
+          navigate("/");
+        }
+      });
   };
 
   return (

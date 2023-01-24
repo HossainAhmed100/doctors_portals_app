@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { HiOutlineMenuAlt1 } from "react-icons/hi";
+import { HiOutlineSquares2X2 } from "react-icons/hi2";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../Contexts/AuthProvider";
 import { useEffect } from "react";
@@ -32,6 +33,15 @@ function NavBar() {
             <Link to="/dashboard">Dashboard</Link>
           </li>
           <li>
+            <button
+              onClick={() => setHttt(!httt)}
+              data-toggle-theme="dark,light"
+              data-act-class="ACTIVECLASS"
+            >
+              {httt ? "Dark" : "Light"}
+            </button>
+          </li>
+          <li>
             <button onClick={() => handleLogOut()}>SignOut</button>
           </li>
         </>
@@ -52,11 +62,11 @@ function NavBar() {
       <div className="navbar container mx-auto">
         <div className="navbar-start">
           <div className="dropdown">
-            <label tabIndex={0} className="btn btn-ghost lg:hidden">
+            <label tabIndex={1} className="btn btn-ghost lg:hidden">
               <HiOutlineMenuAlt1 size={25} />
             </label>
             <ul
-              tabIndex={0}
+              tabIndex={2}
               className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
             >
               {menuItems}
@@ -77,13 +87,9 @@ function NavBar() {
           ) : (
             ""
           )}
-          <button
-            onClick={() => setHttt(!httt)}
-            data-toggle-theme="dark,light"
-            data-act-class="ACTIVECLASS"
-          >
-            {httt ? "Dark" : "Light"}
-          </button>
+          <label htmlFor="drawer-toggle" className="btn btn-ghost lg:hidden">
+            <HiOutlineSquares2X2 size={25} />
+          </label>
         </div>
       </div>
     </div>

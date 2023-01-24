@@ -15,7 +15,7 @@ export const AuthContext = createContext();
 const auth = getAuth(app);
 
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState(null);
   const [userLoding, setUserLoding] = useState(true);
   const provider = new GoogleAuthProvider();
 
@@ -33,7 +33,7 @@ const AuthProvider = ({ children }) => {
 
   // User Info Update
   const updateUser = (userInfo) => {
-    return updateProfile(user, userInfo);
+    return updateProfile(auth.currentUser, userInfo);
   };
 
   // Fetch User Data From Firebase
