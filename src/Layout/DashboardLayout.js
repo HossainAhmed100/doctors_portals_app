@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 import NavBar from "../Components/NavBar/NavBar";
 
 function DashboardLayout() {
@@ -11,14 +11,14 @@ function DashboardLayout() {
         <div className="drawer-content">
           <Outlet />
         </div>
-        <div className="drawer-side border-r-4">
+        <div className="drawer-side border-r-4 border-t-4  border-l-4">
           <label htmlFor="drawer-toggle" className="drawer-overlay"></label>
-          <ul className="menu p-4 w-80 bg-base-100 divide-y-2 text-base-content">
+          <ul className="menu space-y-1 p-4 w-80 bg-base-100 text-base-content">
             <li>
-              <a href="/">Appoinmetn</a>
+              <NavLink to="/dashboard">My Appoinmetns</NavLink>
             </li>
             <li>
-              <a href="/">Date</a>
+              <NavLink to="allusers">All Users</NavLink>
             </li>
           </ul>
         </div>

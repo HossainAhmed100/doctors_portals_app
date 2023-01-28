@@ -3,10 +3,13 @@ import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../Contexts/AuthProvider";
+import useToken from "../../hooks/useToken";
 
 function Login() {
   const { userLogin, signinGooglePopup } = useContext(AuthContext);
   const [loginError, setLoginError] = useState("");
+  const [loginUserEmail, setLoginUserEmail] = useState("");
+  const [token] = useToken(loginUserEmail);
   const location = useLocation();
   const navigate = useNavigate();
   const {
@@ -20,9 +23,8 @@ function Login() {
     const password = data.inputPassword;
     userLogin(email, password)
       .then((result) => {
-        console.log(result);
+        setLoginUserEmail(email);
         toast.success("Login Successfull");
-        navigate(from, { replace: true });
       })
       .catch((error) => {
         console.log(error);
@@ -32,6 +34,10 @@ function Login() {
   };
 
   const from = location.state?.from?.pathname || "/";
+
+  if (token) {
+    navigate(from, { replace: true });
+  }
 
   return (
     <div className="contsiner mx-auto py-20">

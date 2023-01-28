@@ -67,7 +67,7 @@ function NavBar() {
             </label>
             <ul
               tabIndex={2}
-              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 space-y-1"
             >
               {menuItems}
             </ul>
@@ -77,7 +77,7 @@ function NavBar() {
           </a>
         </div>
         <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">{menuItems}</ul>
+          <ul className="menu menu-horizontal px-1 space-x-1">{menuItems}</ul>
         </div>
         <div className="navbar-end">
           {user?.uid ? (

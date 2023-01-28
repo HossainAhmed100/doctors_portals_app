@@ -1,13 +1,20 @@
 import React, { useContext } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { BsGoogle } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../Contexts/AuthProvider";
+import useToken from "../../hooks/useToken";
 
 function SignUp() {
   const { createUser, updateUser } = useContext(AuthContext);
+  const [createdUserEmail, setCreatedUserEmail] = useState("");
+  const [token] = useToken(createdUserEmail);
   const navigate = useNavigate();
+  if (token) {
+    navigate("/");
+  }
   const {
     register,
     handleSubmit,
@@ -19,7 +26,6 @@ function SignUp() {
     const password = data.inputPassword;
     await createUser(email, password)
       .then(async (result) => {
-        console.log(result);
         const userInfo = { displayName: name };
         toast.success("SignUp Successfull");
         await updateUser(userInfo)
@@ -44,17 +50,8 @@ function SignUp() {
     })
       .then((res) => res.json())
       .then((data) => {
-        getUserToken(email);
-      });
-  };
-
-  const getUserToken = (email) => {
-    fetch(`http://localhost:5000/jwt?email=${email}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.accessToken) {
-          localStorage.setItem("accessToken", data.accessToken);
-          navigate("/");
+        if (data) {
+          setCreatedUserEmail(email);
         }
       });
   };
