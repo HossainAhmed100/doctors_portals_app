@@ -54,7 +54,7 @@ function AllUsers() {
 
   return (
     <div className="p-10">
-      <h3 className="text-3xl mb-5">My Appointments</h3>
+      <h3 className="text-3xl mb-5 text-center">All Users</h3>
       <div className="overflow-x-auto">
         <table className="table w-full">
           <thead>
