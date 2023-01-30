@@ -30,7 +30,7 @@ function NavBar() {
       {user?.uid ? (
         <>
           <li>
-            <Link to="/dashboard">Dashboard</Link>
+            <Link to="/dashboard/myappointment">Dashboard</Link>
           </li>
           <li>
             <button

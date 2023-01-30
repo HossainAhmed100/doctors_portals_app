@@ -2,10 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { MdOutlineAddPhotoAlternate } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import UserBarLoder from "../../../Components/UserLoding/UserBarLoder";
 
 function AddDoctor() {
+  const navigate = useNavigate();
   const imghostKey = process.env.REACT_APP_imgbb_key;
   // console.log(imghostKey);
   const { data: specialtes = [], isLoading } = useQuery({
@@ -29,18 +31,32 @@ function AddDoctor() {
     const image = data.doctorsimg[0];
     const formData = new FormData();
     formData.append("image", image);
-    const user = { name, email, specialty, image };
-    const url = `https://api.imgbb.com/1/upload?expiration=600&key=${imghostKey}`;
+
+    const url = `https://api.imgbb.com/1/upload?key=${imghostKey}`;
+
     fetch(url, { method: "POST", body: formData })
       .then((res) => res.json())
       .then((imgData) => {
-        console.log(imgData);
         if (imgData.success) {
-          toast.success("Success");
-          console.log(imgData.data.url);
+          const picture = imgData.data.url;
+          const doctors = { name, email, specialty, picture };
+          fetch("http://localhost:5000/doctors", {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+              authorization: `bearer ${localStorage.getItem("accessToken")}`,
+            },
+            body: JSON.stringify(doctors),
+          })
+            .then((res) => res.json())
+            .then((postData) => {
+              if (postData.acknowledged) {
+                toast.success(`${doctors.name} is Added Successfully`);
+                navigate("/dashboard/managedoctors");
+              }
+            });
         }
       });
-    // console.log(url, image);
   };
 
   if (isLoading) {

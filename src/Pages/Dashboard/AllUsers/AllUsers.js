@@ -3,6 +3,7 @@ import React from "react";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { BsFillTrashFill } from "react-icons/bs";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 function AllUsers() {
   const { data: users = [], refetch } = useQuery({
@@ -52,6 +53,35 @@ function AllUsers() {
       });
   };
 
+  const handleDeleteUser = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const url = `http://localhost:5000/users/${id}`;
+        fetch(url, {
+          method: "DELETE",
+          headers: {
+            authorization: `bearer ${localStorage.getItem("accessToken")}`,
+          },
+        })
+          .then((res) => res.json())
+          .then((deletedata) => {
+            if (deletedata.acknowledged) {
+              Swal.fire("Deleted!", "User has been deleted.", "success");
+              refetch();
+            }
+          });
+      }
+    });
+  };
+
   return (
     <div className="p-10">
       <h3 className="text-3xl mb-5 text-center">All Users</h3>
@@ -59,7 +89,9 @@ function AllUsers() {
         <table className="table w-full">
           <thead>
             <tr>
-              <th>Index</th>
+              <th>
+                Index <div className="badge ml-1">{users.length}</div>
+              </th>
               <th>Name</th>
               <th>Email</th>
               <th>Role</th>
@@ -76,24 +108,27 @@ function AllUsers() {
                   {user?.role !== "Admin" ? (
                     <button
                       onClick={() => handleMakeAdmin(user._id)}
-                      className="btn gap-2 btn-primary"
+                      className="btn gap-2 btn-sm btn-primary"
                     >
-                      <MdOutlineAdminPanelSettings size={25} />
+                      <MdOutlineAdminPanelSettings size={20} />
                       Make Admin
                     </button>
                   ) : (
                     <button
                       onClick={() => handleRemoveAdmin(user._id)}
-                      className="btn gap-2 btn-primary"
+                      className="btn gap-2 btn-sm btn-primary"
                     >
-                      <MdOutlineAdminPanelSettings size={25} />
+                      <MdOutlineAdminPanelSettings size={20} />
                       Remove Admin
                     </button>
                   )}
                 </td>
                 <td>
-                  <button className="btn gap-2 btn-error text-white">
-                    <BsFillTrashFill size={22} />
+                  <button
+                    onClick={() => handleDeleteUser(user._id)}
+                    className="btn gap-2 btn-sm btn-error text-white"
+                  >
+                    <BsFillTrashFill size={20} />
                     Delete
                   </button>
                 </td>

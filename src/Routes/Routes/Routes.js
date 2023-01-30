@@ -1,8 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
+import DisplayError from "../../Components/DisplayError/DisplayError";
 import DashboardLayout from "../../Layout/DashboardLayout";
 import AddDoctor from "../../Pages/Dashboard/AddDoctor/AddDoctor";
 import AllUsers from "../../Pages/Dashboard/AllUsers/AllUsers";
 import MyAppointment from "../../Pages/Dashboard/Dashboard/MyAppointment/MyAppointment";
+import Payment from "../../Pages/Dashboard/Dashboard/Payment/Payment";
+import ManagaeDoctors from "../../Pages/Dashboard/ManagaeDoctors/ManagaeDoctors";
 import PasswordReset from "../../Pages/PasswordReset/PasswordReset";
 import AdminRoute from "../AdminRoute/AdminRoute";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
@@ -16,6 +19,7 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <Main />,
+    errorElement: <DisplayError />,
     children: [
       {
         path: "/",
@@ -37,6 +41,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
+    errorElement: <DisplayError />,
     element: (
       <PrivateRoute>
         <DashboardLayout />
@@ -44,26 +49,46 @@ export const router = createBrowserRouter([
     ),
     children: [
       {
-        path: "/dashboard",
+        path: "/dashboard/myappointment",
         element: <MyAppointment />,
       },
       {
-        path: "allusers",
+        path: "/dashboard/allusers",
         element: (
           <AdminRoute>
-            {" "}
             <AllUsers />
           </AdminRoute>
         ),
       },
       {
-        path: "adddoctor",
+        path: "/dashboard/adddoctor",
         element: (
           <AdminRoute>
-            {" "}
             <AddDoctor />
           </AdminRoute>
         ),
+      },
+      {
+        path: "/dashboard/managedoctors",
+        element: (
+          <AdminRoute>
+            <ManagaeDoctors />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "/dashboard/payment/:id",
+        element: (
+          <AdminRoute>
+            <Payment />
+          </AdminRoute>
+        ),
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/bookings/${params.id}`, {
+            headers: {
+              authorization: `Bearer ${localStorage.getItem("accessToken")} `,
+            },
+          }),
       },
     ],
   },

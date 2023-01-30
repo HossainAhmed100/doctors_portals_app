@@ -9,6 +9,7 @@ function AppointmentOptions({ options, setStatement }) {
         {options.slots.length} {options.slots.length > 1 ? "Spaces" : "Space"}{" "}
         Available
       </p>
+      <p>Price {options.price}$</p>
       <div className="card-actions justify-end">
         <label
           disabled={options.slots.length === 0}

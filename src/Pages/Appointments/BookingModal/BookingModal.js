@@ -17,6 +17,7 @@ function BookingModal({ treatment, setTreatment, selectedDate, refetch }) {
       email: user?.email,
       appointmentDate: date,
       treatment: treatment.name,
+      price: treatment.price,
       patient: user?.displayName,
     };
 
