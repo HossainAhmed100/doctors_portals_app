@@ -101,10 +101,7 @@ function MyAppointment() {
                       </button>
                     </Link>
                   ) : (
-                    <button className="btn btn-sm btn-primary">
-                      Paid{" "}
-                      <RiMoneyDollarCircleLine className="ml-1" size={20} />
-                    </button>
+                    <span className="text-green-500">Paid</span>
                   )}
                 </td>
                 <td>

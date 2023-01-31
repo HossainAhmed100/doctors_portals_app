@@ -1,6 +1,7 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import React, { useEffect } from "react";
 import { useState } from "react";
+import { CgSpinner } from "react-icons/cg";
 
 function CheckoutForm({ bookings }) {
   const stripe = useStripe();
@@ -59,9 +60,26 @@ function CheckoutForm({ bookings }) {
       setCardErrors(confirmError.message);
     }
     if (paymentIntent.status === "succeeded") {
-      setSuccessMesage("Congrats! Your payment completed");
-      setTransactionid(paymentIntent.id);
-      setProcessing(false);
+      const payment = {
+        price,
+        email: bookings.email,
+        bookingId: bookings._id,
+        transactionid: paymentIntent.id,
+      };
+      fetch("http://localhost:5000/payments", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          authorization: `bearer ${localStorage.getItem("accessToken")}`,
+        },
+        body: JSON.stringify(payment),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setSuccessMesage("Congrats! Your payment completed");
+          setTransactionid(paymentIntent.id);
+          setProcessing(false);
+        });
     }
     console.log(paymentIntent);
   };
@@ -86,11 +104,14 @@ function CheckoutForm({ bookings }) {
           }}
         />
         <button
-          className="btn btn-sm p-4"
           type="submit"
           disabled={!stripe || !clientSecret || processing}
+          class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-white bg-indigo-500 hover:bg-indigo-400 transition ease-in-out duration-150"
         >
-          Pay
+          {processing && (
+            <CgSpinner class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
+          )}
+          PAY
         </button>
       </form>
       <p className="text-red-500">{cardErrors}</p>
