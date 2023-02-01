@@ -1,3 +1,4 @@
+import axios from "../../axios";
 import { createBrowserRouter } from "react-router-dom";
 import DisplayError from "../../Components/DisplayError/DisplayError";
 import DashboardLayout from "../../Layout/DashboardLayout";
@@ -84,7 +85,7 @@ export const router = createBrowserRouter([
           </AdminRoute>
         ),
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/bookings/${params.id}`, {
+          axios.get(`/bookings/${params.id}`, {
             headers: {
               authorization: `Bearer ${localStorage.getItem("accessToken")} `,
             },

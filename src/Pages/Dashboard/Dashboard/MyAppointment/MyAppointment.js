@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import axios from "../../../../axios";
 import React from "react";
 import { useContext } from "react";
 import { RiCloseFill, RiMoneyDollarCircleLine } from "react-icons/ri";
@@ -9,7 +10,7 @@ import { AuthContext } from "../../../../Contexts/AuthProvider";
 
 function MyAppointment() {
   const { user } = useContext(AuthContext);
-  const url = `http://localhost:5000/bookings?email=${user?.email}`;
+  const url = `/bookings?email=${user?.email}`;
   const {
     data: bookings = [],
     isLoading,
@@ -17,7 +18,7 @@ function MyAppointment() {
   } = useQuery({
     queryKey: ["bookings", user?.email],
     queryFn: async () => {
-      const res = await fetch(url, {
+      const res = await axios.get(url, {
         headers: {
           authorization: `bearer ${localStorage.getItem("accessToken")}`,
         },
@@ -38,16 +39,15 @@ function MyAppointment() {
       confirmButtonText: "Yes, Cancel it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        const url = `http://localhost:5000/bookings/${id}`;
-        fetch(url, {
-          method: "DELETE",
-          headers: {
-            authorization: `bearer ${localStorage.getItem("accessToken")}`,
-          },
-        })
-          .then((res) => res.json())
+        const url = `/bookings/${id}`;
+        axios
+          .delete(url, {
+            headers: {
+              authorization: `bearer ${localStorage.getItem("accessToken")}`,
+            },
+          })
           .then((deletedata) => {
-            if (deletedata.acknowledged) {
+            if (deletedata.data.acknowledged) {
               Swal.fire(
                 "Deleted!",
                 "Appointment has been Canceled.",

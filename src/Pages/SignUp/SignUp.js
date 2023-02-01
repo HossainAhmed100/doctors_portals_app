@@ -1,3 +1,4 @@
+import axios from "../../axios";
 import React, { useContext } from "react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -41,19 +42,11 @@ function SignUp() {
 
   const saveUser = (name, email) => {
     const user = { name, email };
-    fetch("http://localhost:5000/users", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(user),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data) {
-          setCreatedUserEmail(email);
-        }
-      });
+    axios.post("/users", { user }).then((res) => {
+      if (res.data) {
+        setCreatedUserEmail(email);
+      }
+    });
   };
 
   return (

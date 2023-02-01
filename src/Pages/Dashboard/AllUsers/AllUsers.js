@@ -4,30 +4,28 @@ import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { BsFillTrashFill } from "react-icons/bs";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
+import axios from "../../../axios";
 
 function AllUsers() {
   const { data: users = [], refetch } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:5000/users");
-      const data = await res.json();
-      return data;
+      const res = await axios.get("/users");
+      return res.data;
     },
   });
 
   const handleMakeAdmin = (id) => {
     const role = { role: "Admin" };
-    fetch(`http://localhost:5000/users/admin/${id}`, {
-      method: "PUT",
-      headers: {
-        authorization: `bearer ${localStorage.getItem("accessToken")}`,
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(role),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.modifiedCount > 0) {
+    axios
+      .put(`/users/admin/${id}`, role, {
+        headers: {
+          authorization: `bearer ${localStorage.getItem("accessToken")}`,
+          "content-type": "application/json",
+        },
+      })
+      .then((res) => {
+        if (res.data.modifiedCount > 0) {
           toast.success("Make Admin Successfull");
           refetch();
         }
@@ -36,17 +34,15 @@ function AllUsers() {
 
   const handleRemoveAdmin = (id) => {
     const role = { role: "User" };
-    fetch(`http://localhost:5000/users/admin/${id}`, {
-      method: "PUT",
-      headers: {
-        authorization: `bearer ${localStorage.getItem("accessToken")}`,
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(role),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.modifiedCount > 0) {
+    axios
+      .put(`/users/admin/${id}`, role, {
+        headers: {
+          authorization: `bearer ${localStorage.getItem("accessToken")}`,
+          "content-type": "application/json",
+        },
+      })
+      .then((res) => {
+        if (res.data.modifiedCount > 0) {
           toast.success("Make Admin Successfull");
           refetch();
         }
@@ -64,16 +60,15 @@ function AllUsers() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        const url = `http://localhost:5000/users/${id}`;
-        fetch(url, {
-          method: "DELETE",
-          headers: {
-            authorization: `bearer ${localStorage.getItem("accessToken")}`,
-          },
-        })
-          .then((res) => res.json())
+        const url = `/users/${id}`;
+        axios
+          .delete(url, {
+            headers: {
+              authorization: `bearer ${localStorage.getItem("accessToken")}`,
+            },
+          })
           .then((deletedata) => {
-            if (deletedata.acknowledged) {
+            if (deletedata.data.acknowledged) {
               Swal.fire("Deleted!", "User has been deleted.", "success");
               refetch();
             }

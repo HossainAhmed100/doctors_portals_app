@@ -1,4 +1,5 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import axios from "../../../../axios";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { CgSpinner } from "react-icons/cg";
@@ -14,16 +15,14 @@ function CheckoutForm({ bookings }) {
   const { price } = bookings;
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
-    fetch("http://localhost:5000/create-payment-intent", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-      body: JSON.stringify({ price }),
-    })
-      .then((res) => res.json())
-      .then((data) => setClientSecret(data.clientSecret));
+    axios
+      .post("/create-payment-intent", price, {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      })
+      .then((res) => setClientSecret(res.data.clientSecret));
   }, [price]);
 
   const handleSubmit = async (event) => {
@@ -66,16 +65,17 @@ function CheckoutForm({ bookings }) {
         bookingId: bookings._id,
         transactionid: paymentIntent.id,
       };
-      fetch("http://localhost:5000/payments", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          authorization: `bearer ${localStorage.getItem("accessToken")}`,
-        },
-        body: JSON.stringify(payment),
-      })
-        .then((res) => res.json())
-        .then((data) => {
+      axios
+        .post(
+          "/payments",
+          { payment },
+          {
+            headers: {
+              authorization: `bearer ${localStorage.getItem("accessToken")}`,
+            },
+          }
+        )
+        .then((res) => {
           setSuccessMesage("Congrats! Your payment completed");
           setTransactionid(paymentIntent.id);
           setProcessing(false);

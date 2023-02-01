@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import axios from "../../../axios";
 import React from "react";
 import { BsFillTrashFill } from "react-icons/bs";
 import { toast } from "react-toastify";
@@ -7,22 +8,19 @@ function ManagaeDoctors() {
   const { data: doctors = [], refetch } = useQuery({
     queryKey: ["doctors"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:5000/doctors");
-      const data = await res.json();
-      return data;
+      const res = await axios.get("/doctors");
+      return res.data;
     },
   });
 
   const handleDeleteDoctor = (id) => {
-    const url = `http://localhost:5000/doctors/${id}`;
-    fetch(url, { method: "DELETE" })
-      .then((res) => res.json())
-      .then((deletedata) => {
-        if (deletedata.acknowledged) {
-          refetch();
-          toast.success("Delete Successfully");
-        }
-      });
+    const url = `/doctors/${id}`;
+    axios.delete(url).then((deletedata) => {
+      if (deletedata.data.acknowledged) {
+        refetch();
+        toast.success("Delete Successfully");
+      }
+    });
   };
 
   return (

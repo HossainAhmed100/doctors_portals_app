@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { format } from "date-fns";
 import { AuthContext } from "../../../Contexts/AuthProvider";
 import { toast } from "react-toastify";
+import axios from "../../../axios";
 
 function BookingModal({ treatment, setTreatment, selectedDate, refetch }) {
   const { user } = useContext(AuthContext);
@@ -21,23 +22,16 @@ function BookingModal({ treatment, setTreatment, selectedDate, refetch }) {
       patient: user?.displayName,
     };
 
-    fetch("http://localhost:5000/booking", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(booking),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.acknowledged === true) {
-          setTreatment(null);
-          toast.success("Booking Confirm");
-          refetch();
-        } else {
-          toast.error(data.message);
-        }
-      });
+    try {
+      const res = axios.get("/booking");
+      if (res.data.acknowledged) {
+        setTreatment(null);
+        toast.success("Booking Confirm");
+        refetch();
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
   return (
     <div>

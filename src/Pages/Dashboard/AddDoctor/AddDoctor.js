@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import axios from "../../../axios";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { MdOutlineAddPhotoAlternate } from "react-icons/md";
@@ -13,9 +14,8 @@ function AddDoctor() {
   const { data: specialtes = [], isLoading } = useQuery({
     queryKey: ["specialty"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:5000/appointmentspecialty");
-      const data = await res.json();
-      return data;
+      const res = await axios.get("/appointmentspecialty");
+      return res.data;
     },
   });
 
@@ -34,29 +34,25 @@ function AddDoctor() {
 
     const url = `https://api.imgbb.com/1/upload?key=${imghostKey}`;
 
-    fetch(url, { method: "POST", body: formData })
-      .then((res) => res.json())
-      .then((imgData) => {
-        if (imgData.success) {
-          const picture = imgData.data.url;
-          const doctors = { name, email, specialty, picture };
-          fetch("http://localhost:5000/doctors", {
-            method: "POST",
+    axios.post(url, formData).then((res) => {
+      if (res.data.success) {
+        const picture = res.data.data.url;
+        const doctors = { name, email, specialty, picture };
+        axios
+          .post("/doctors", doctors, {
             headers: {
               "content-type": "application/json",
               authorization: `bearer ${localStorage.getItem("accessToken")}`,
             },
-            body: JSON.stringify(doctors),
           })
-            .then((res) => res.json())
-            .then((postData) => {
-              if (postData.acknowledged) {
-                toast.success(`${doctors.name} is Added Successfully`);
-                navigate("/dashboard/managedoctors");
-              }
-            });
-        }
-      });
+          .then((res) => {
+            if (res.data.acknowledged) {
+              toast.success(`${doctors.name} is Added Successfully`);
+              navigate("/dashboard/managedoctors");
+            }
+          });
+      }
+    });
   };
 
   if (isLoading) {

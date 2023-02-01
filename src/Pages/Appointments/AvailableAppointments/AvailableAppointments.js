@@ -4,23 +4,21 @@ import AppointmentOptions from "./AppointmentOptions";
 import BookingModal from "../BookingModal/BookingModal";
 import { useQuery } from "@tanstack/react-query";
 import UserBarLoder from "../../../Components/UserLoding/UserBarLoder";
+import axios from "../.././../axios";
 
 function AvailableAppointments({ selectedDate }) {
   // const [appointmentOptions, setAppointmentOptions] = useState([]);
   const [treatment, setTreatment] = useState(null);
   const date = format(selectedDate, "PP");
   const {
-    data: appointmentOptions,
+    data: appointmentOptions = [],
     isLoading,
     refetch,
   } = useQuery({
     queryKey: ["appointmentOptions", date],
     queryFn: async () => {
-      const res = await fetch(
-        `http://localhost:5000/appointmentOptions?date=${date}`
-      );
-      const data = await res.json();
-      return data;
+      const res = await axios.get(`/appointmentOptions?date=${date}`);
+      return res.data;
     },
   });
 
